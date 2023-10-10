@@ -1,3 +1,3 @@
-project simple 
+# Simple Shell Project 
 mohammed ibrahim
 imed hamdi
