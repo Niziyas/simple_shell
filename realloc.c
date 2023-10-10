@@ -1,5 +1,5 @@
+#include <stdio.h>
 #include "shell.h"
-#include <stdlib.h>
 
 /**
  * _memset - fills memory with a constant byte
@@ -38,7 +38,7 @@ void ffree(char **pp)
  * @old_size: byte size of previous block
  * @new_size: byte size of new block
  *
- * Return: pointer to the reallocated block
+ * Return: pointer to da ol'block nameen.
  */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
@@ -47,10 +47,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 	if (!ptr)
 		return (malloc(new_size));
 	if (!new_size)
-	{
-		free(ptr);
-		return (NULL);
-	}
+		return (free(ptr), NULL);
 	if (new_size == old_size)
 		return (ptr);
 

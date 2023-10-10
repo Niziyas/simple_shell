@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "shell.h"
 
 /**
@@ -33,7 +34,7 @@ int _eputchar(char c)
 
 	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
 	{
-		write(STDERR_FILENO, buf, i);
+		write(2, buf, i);
 		i = 0;
 	}
 	if (c != BUF_FLUSH)
@@ -44,7 +45,7 @@ int _eputchar(char c)
 /**
  * _putfd - writes the character c to given fd
  * @c: The character to print
- * @fd: The file descriptor to write to
+ * @fd: The filedescriptor to write to
  *
  * Return: On success 1.
  * On error, -1 is returned, and errno is set appropriately.
@@ -67,9 +68,9 @@ int _putfd(char c, int fd)
 /**
  * _putsfd - prints an input string
  * @str: the string to be printed
- * @fd: the file descriptor to write to
+ * @fd: the filedescriptor to write to
  *
- * Return: the number of characters written
+ * Return: the number of chars put
  */
 int _putsfd(char *str, int fd)
 {

@@ -1,5 +1,5 @@
+#include <stdio.h>
 #include "shell.h"
-#include <sys/stat.h>
 
 /**
  * is_cmd - determines if a file is an executable command
@@ -13,13 +13,14 @@ int is_cmd(info_t *info, char *path)
 	struct stat st;
 
 	(void)info;
-	if (!path || stat(path, &st) != 0)
-		return 0;
+	if (!path || stat(path, &st))
+		return (0);
 
-	if (S_ISREG(st.st_mode))
-		return 1;
-
-	return 0;
+	if (st.st_mode & S_IFREG)
+	{
+		return (1);
+	}
+	return (0);
 }
 
 /**
@@ -33,15 +34,13 @@ int is_cmd(info_t *info, char *path)
 char *dup_chars(char *pathstr, int start, int stop)
 {
 	static char buf[1024];
-	int i, k = 0;
+	int i = 0, k = 0;
 
-	for (i = start; i < stop; i++)
-	{
+	for (k = 0, i = start; i < stop; i++)
 		if (pathstr[i] != ':')
 			buf[k++] = pathstr[i];
-	}
-	buf[k] = '\0';
-	return buf;
+	buf[k] = 0;
+	return (buf);
 }
 
 /**
@@ -58,14 +57,12 @@ char *find_path(info_t *info, char *pathstr, char *cmd)
 	char *path;
 
 	if (!pathstr)
-		return NULL;
-
-	if (_strlen(cmd) > 2 && starts_with(cmd, "./"))
+		return (NULL);
+	if ((_strlen(cmd) > 2) && starts_with(cmd, "./"))
 	{
 		if (is_cmd(info, cmd))
-			return cmd;
+			return (cmd);
 	}
-
 	while (1)
 	{
 		if (!pathstr[i] || pathstr[i] == ':')
@@ -79,12 +76,12 @@ char *find_path(info_t *info, char *pathstr, char *cmd)
 				_strcat(path, cmd);
 			}
 			if (is_cmd(info, path))
-				return path;
+				return (path);
 			if (!pathstr[i])
 				break;
-			curr_pos = i + 1;
+			curr_pos = i;
 		}
 		i++;
 	}
-	return NULL;
+	return (NULL);
 }

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "shell.h"
 
 /**
@@ -14,7 +15,7 @@ int _myhistory(info_t *info)
 }
 
 /**
- * unset_alias - unsets an alias string
+ * unset_alias - sets alias to string
  * @info: parameter struct
  * @str: the string alias
  *
@@ -29,7 +30,7 @@ int unset_alias(info_t *info, char *str)
 	if (!p)
 		return (1);
 	c = *p;
-	*p = '\0';
+	*p = 0;
 	ret = delete_node_at_index(&(info->alias),
 		get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
 	*p = c;
@@ -37,7 +38,7 @@ int unset_alias(info_t *info, char *str)
 }
 
 /**
- * set_alias - sets an alias string
+ * set_alias - sets alias to string
  * @info: parameter struct
  * @str: the string alias
  *
@@ -71,7 +72,7 @@ int print_alias(list_t *node)
 	{
 		p = _strchr(node->str, '=');
 		for (a = node->str; a <= p; a++)
-			_putchar(*a);
+		_putchar(*a);
 		_putchar('\'');
 		_puts(p + 1);
 		_puts("'\n");

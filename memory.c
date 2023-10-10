@@ -1,5 +1,5 @@
+#include <stdio.h>
 #include "shell.h"
-#include <stdlib.h>
 
 /**
  * bfree - frees a pointer and NULLs the address
@@ -13,7 +13,7 @@ int bfree(void **ptr)
 	{
 		free(*ptr);
 		*ptr = NULL;
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }
