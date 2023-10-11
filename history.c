@@ -38,16 +38,22 @@ int write_history(info_t *info)
 	list_t *node = NULL;
 
 	if (!filename)
+	{
 		return (-1);
+	}
 
 	fd = open(filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
 	free(filename);
 	if (fd == -1)
+	{
 		return (-1);
-	for (node = info->history; node; node = node->next)
+	}
+	node = info->history;
+	while (node)
 	{
 		_putsfd(node->str, fd);
 		_putfd('\n', fd);
+		node = node->next;
 	}
 	_putfd(BUF_FLUSH, fd);
 	close(fd);
@@ -62,14 +68,13 @@ int write_history(info_t *info)
  */
 int read_history(info_t *info)
 {
-	int i, last = 0, linecount = 0;
+	int i = 0, last = 0, linecount = 0;
 	ssize_t fd, rdlen, fsize = 0;
 	struct stat st;
 	char *buf = NULL, *filename = get_history_file(info);
 
 	if (!filename)
 		return (0);
-
 	fd = open(filename, O_RDONLY);
 	free(filename);
 	if (fd == -1)
@@ -86,13 +91,16 @@ int read_history(info_t *info)
 	if (rdlen <= 0)
 		return (free(buf), 0);
 	close(fd);
-	for (i = 0; i < fsize; i++)
+	while (i < fsize)
+	{
 		if (buf[i] == '\n')
 		{
 			buf[i] = 0;
 			build_history_list(info, buf + last, linecount++);
 			last = i + 1;
 		}
+		i++;
+	}
 	if (last != i)
 		build_history_list(info, buf + last, linecount++);
 	free(buf);
@@ -116,11 +124,15 @@ int build_history_list(info_t *info, char *buf, int linecount)
 	list_t *node = NULL;
 
 	if (info->history)
+	{
 		node = info->history;
+	}
 	add_node_end(&node, buf, linecount);
 
 	if (!info->history)
+	{
 		info->history = node;
+	}
 	return (0);
 }
 

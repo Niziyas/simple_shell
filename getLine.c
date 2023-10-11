@@ -61,18 +61,21 @@ ssize_t get_input(info_t *info)
 	_putchar(BUF_FLUSH);
 	r = input_buf(info, &buf, &len);
 	if (r == -1) /* EOF */
+	{
 		return (-1);
+	}
 	if (len) /* we have commands left in the chain buffer */
 	{
 		j = i; /* init new iterator to current buf position */
 		p = buf + i; /* get pointer for return */
 
 		check_chain(info, buf, &j, i, len);
-		while (j < len) /* iterate to semicolon or end */
+		for (j ; j < len; j++) /* iterate to semicolon or end */
 		{
 			if (is_chain(info, buf, &j))
+			{
 				break;
-			j++;
+			}
 		}
 
 		i = j + 1; /* increment past nulled ';'' */
@@ -103,10 +106,14 @@ ssize_t read_buf(info_t *info, char *buf, size_t *i)
 	ssize_t r = 0;
 
 	if (*i)
+	{
 		return (0);
+	}
 	r = read(info->readfd, buf, READ_BUF_SIZE);
 	if (r >= 0)
+	{
 		*i = r;
+	}
 	return (r);
 }
 

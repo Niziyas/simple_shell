@@ -9,14 +9,15 @@
  */
 void _eputs(char *str)
 {
-	int i = 0;
+	int i;
 
 	if (!str)
+	{
 		return;
-	while (str[i] != '\0')
+	}
+	for (i = 0; str[i] != '\0'; i++)
 	{
 		_eputchar(str[i]);
-		i++;
 	}
 }
 
@@ -38,7 +39,9 @@ int _eputchar(char c)
 		i = 0;
 	}
 	if (c != BUF_FLUSH)
+	{
 		buf[i++] = c;
+	}
 	return (1);
 }
 
@@ -61,7 +64,9 @@ int _putfd(char c, int fd)
 		i = 0;
 	}
 	if (c != BUF_FLUSH)
+	{
 		buf[i++] = c;
+	}
 	return (1);
 }
 
@@ -77,7 +82,9 @@ int _putsfd(char *str, int fd)
 	int i = 0;
 
 	if (!str)
+	{
 		return (0);
+	}
 	while (*str)
 	{
 		i += _putfd(*str++, fd);
