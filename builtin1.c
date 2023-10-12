@@ -95,7 +95,7 @@ int print_alias(list_t *node)
  */
 int _myalias(info_t *info)
 {
-	int i = 0;
+	
 	int x = 1;
 	char *p = NULL;
 	list_t *node = NULL;
