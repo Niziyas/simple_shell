@@ -90,7 +90,7 @@ int print_d(int input, int fd)
 			count++;
 		}
 		current %= i;
-		i /= 10
+		i /= 10;
 	}
 	__putchar('0' + current);
 	count++;
