@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "shell.h"
 
 /**
@@ -21,8 +22,8 @@ char **get_environ(info_t *info)
  * _unsetenv - Remove an environment variable
  * @info: Structure containing potential arguments. Used to maintain
  *        constant function prototype.
+ *  Return: 1 on delete, 0 otherwise
  * @var: the string env var property
- * Return: 1 on delete, 0 otherwise
  */
 int _unsetenv(info_t *info, char *var)
 {
@@ -31,7 +32,9 @@ int _unsetenv(info_t *info, char *var)
 	char *p;
 
 	if (!node || !var)
+	{
 		return (0);
+	}
 
 	while (node)
 	{
@@ -56,7 +59,7 @@ int _unsetenv(info_t *info, char *var)
  *        constant function prototype.
  * @var: the string env var property
  * @value: the string env var value
- * Return: Always 0
+ *  Return: Always 0
  */
 int _setenv(info_t *info, char *var, char *value)
 {
@@ -65,11 +68,15 @@ int _setenv(info_t *info, char *var, char *value)
 	char *p;
 
 	if (!var || !value)
+	{
 		return (0);
+	}
 
 	buf = malloc(_strlen(var) + _strlen(value) + 2);
 	if (!buf)
+	{
 		return (1);
+	}
 	_strcpy(buf, var);
 	_strcat(buf, "=");
 	_strcat(buf, value);
@@ -90,25 +97,4 @@ int _setenv(info_t *info, char *var, char *value)
 	free(buf);
 	info->env_changed = 1;
 	return (0);
-}
-
-/**
- * starts_with - Checks if a string starts with a given prefix
- * @str: The string to check
- * @prefix: The prefix to compare
- *
- * Return: Pointer to the start of the prefix within the string,
- *         or NULL if the string does not start with the prefix.
- */
-char *starts_with(const char *str, const char *prefix)
-{
-	size_t i;
-
-	for (i = 0; prefix[i]; i++)
-	{
-		if (str[i] != prefix[i])
-			return (NULL);
-	}
-
-	return ((char *)str + i);
 }

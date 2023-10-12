@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "shell.h"
 
 /**
@@ -12,18 +13,25 @@ int _erratoi(char *s)
 	unsigned long int result = 0;
 
 	if (*s == '+')
+	{
 		s++;  /* TODO: why does this make main return 255? */
-	for (i = 0;  s[i] != '\0'; i++)
+	}
+	while (s[i] != '\0')
 	{
 		if (s[i] >= '0' && s[i] <= '9')
 		{
 			result *= 10;
 			result += (s[i] - '0');
 			if (result > INT_MAX)
+			{
 				return (-1);
+			}
 		}
 		else
+		{
 			return (-1);
+		}
+		i++;
 	}
 	return (result);
 }
@@ -32,7 +40,8 @@ int _erratoi(char *s)
  * print_error - prints an error message
  * @info: the parameter & return info struct
  * @estr: string containing specified error type
- * Return: None
+ * Return: 0 if no numbers in string, converted number otherwise
+ *        -1 on error
  */
 void print_error(info_t *info, char *estr)
 {
@@ -48,18 +57,20 @@ void print_error(info_t *info, char *estr)
 /**
  * print_d - function prints a decimal (integer) number (base 10)
  * @input: the input
- * @fd: the file descriptor to write to
+ * @fd: the filedescriptor to write to
  *
  * Return: number of characters printed
  */
 int print_d(int input, int fd)
 {
 	int (*__putchar)(char) = _putchar;
-	int i, count = 0;
+	int i = 1000000000, count = 0;
 	unsigned int _abs_, current;
 
 	if (fd == STDERR_FILENO)
+	{
 		__putchar = _eputchar;
+	}
 	if (input < 0)
 	{
 		_abs_ = -input;
@@ -67,9 +78,11 @@ int print_d(int input, int fd)
 		count++;
 	}
 	else
+	{
 		_abs_ = input;
+	}
 	current = _abs_;
-	for (i = 1000000000; i > 1; i /= 10)
+	while (i > 1)
 	{
 		if (_abs_ / i)
 		{
@@ -77,6 +90,7 @@ int print_d(int input, int fd)
 			count++;
 		}
 		current %= i;
+		i /= 10
 	}
 	__putchar('0' + current);
 	count++;
@@ -116,7 +130,9 @@ char *convert_number(long int num, int base, int flags)
 	} while (n != 0);
 
 	if (sign)
+	{
 		*--ptr = sign;
+	}
 	return (ptr);
 }
 
@@ -124,7 +140,7 @@ char *convert_number(long int num, int base, int flags)
  * remove_comments - function replaces first instance of '#' with '\0'
  * @buf: address of the string to modify
  *
- * Return: None
+ * Return: Always 0;
  */
 void remove_comments(char *buf)
 {
