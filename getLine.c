@@ -70,7 +70,7 @@ ssize_t get_input(info_t *info)
 		p = buf + i; /* get pointer for return */
 
 		check_chain(info, buf, &j, i, len);
-		for (j ; j < len; j++) /* iterate to semicolon or end */
+		for (j = 0 ; j < len; j++) /* iterate to semicolon or end */
 		{
 			if (is_chain(info, buf, &j))
 			{
