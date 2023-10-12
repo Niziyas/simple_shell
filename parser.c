@@ -75,7 +75,7 @@ char *find_path(info_t *info, char *pathstr, char *cmd)
 			return (cmd);
 		}
 	}
-	for (i ; i < 1; i++)
+	for (i = 0 ; i < 1; i++)
 	{
 		if (!pathstr[i] || pathstr[i] == ':')
 		{
