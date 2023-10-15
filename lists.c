@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "shell.h"
 
 /**
@@ -14,14 +13,10 @@ list_t *add_node(list_t **head, const char *str, int num)
 	list_t *new_head;
 
 	if (!head)
-	{
 		return (NULL);
-	}
 	new_head = malloc(sizeof(list_t));
 	if (!new_head)
-	{
 		return (NULL);
-	}
 	_memset((void *)new_head, 0, sizeof(list_t));
 	new_head->num = num;
 	if (str)
@@ -51,16 +46,12 @@ list_t *add_node_end(list_t **head, const char *str, int num)
 	list_t *new_node, *node;
 
 	if (!head)
-	{
 		return (NULL);
-	}
 
 	node = *head;
 	new_node = malloc(sizeof(list_t));
 	if (!new_node)
-	{
 		return (NULL);
-	}
 	_memset((void *)new_node, 0, sizeof(list_t));
 	new_node->num = num;
 	if (str)
@@ -79,9 +70,7 @@ list_t *add_node_end(list_t **head, const char *str, int num)
 		node->next = new_node;
 	}
 	else
-	{
 		*head = new_node;
-	}
 	return (new_node);
 }
 
@@ -93,13 +82,14 @@ list_t *add_node_end(list_t **head, const char *str, int num)
  */
 size_t print_list_str(const list_t *h)
 {
-	size_t i;
+	size_t i = 0;
 
-	for (i = 0; h ; i++)
+	while (h)
 	{
 		_puts(h->str ? h->str : "(nil)");
 		_puts("\n");
 		h = h->next;
+		i++;
 	}
 	return (i);
 }
@@ -117,9 +107,7 @@ int delete_node_at_index(list_t **head, unsigned int index)
 	unsigned int i = 0;
 
 	if (!head || !*head)
-	{
 		return (0);
-	}
 
 	if (!index)
 	{
@@ -157,9 +145,7 @@ void free_list(list_t **head_ptr)
 	list_t *node, *next_node, *head;
 
 	if (!head_ptr || !*head_ptr)
-	{
 		return;
-	}
 	head = *head_ptr;
 	node = head;
 	while (node)

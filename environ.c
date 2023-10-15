@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "shell.h"
 
 /**
@@ -50,9 +49,7 @@ int _mysetenv(info_t *info)
 		return (1);
 	}
 	if (_setenv(info, info->argv[1], info->argv[2]))
-	{
 		return (0);
-	}
 	return (1);
 }
 
@@ -60,7 +57,7 @@ int _mysetenv(info_t *info)
  * _myunsetenv - Remove an environment variable
  * @info: Structure containing potential arguments. Used to maintain
  *        constant function prototype.
- * Return: Always 0
+ *  Return: Always 0
  */
 int _myunsetenv(info_t *info)
 {
@@ -72,9 +69,7 @@ int _myunsetenv(info_t *info)
 		return (1);
 	}
 	for (i = 1; i <= info->argc; i++)
-	{
 		_unsetenv(info, info->argv[i]);
-	}
 
 	return (0);
 }
@@ -88,13 +83,10 @@ int _myunsetenv(info_t *info)
 int populate_env_list(info_t *info)
 {
 	list_t *node = NULL;
-	size_t i = 0;
+	size_t i;
 
-	while (environ[i])
-	{
+	for (i = 0; environ[i]; i++)
 		add_node_end(&node, environ[i], 0);
-		i++;
-	}
 	info->env = node;
 	return (0);
 }

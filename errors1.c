@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "shell.h"
 
 /**
@@ -13,25 +12,18 @@ int _erratoi(char *s)
 	unsigned long int result = 0;
 
 	if (*s == '+')
-	{
 		s++;  /* TODO: why does this make main return 255? */
-	}
-	while (s[i] != '\0')
+	for (i = 0;  s[i] != '\0'; i++)
 	{
 		if (s[i] >= '0' && s[i] <= '9')
 		{
 			result *= 10;
 			result += (s[i] - '0');
 			if (result > INT_MAX)
-			{
 				return (-1);
-			}
 		}
 		else
-		{
 			return (-1);
-		}
-		i++;
 	}
 	return (result);
 }
@@ -64,13 +56,11 @@ void print_error(info_t *info, char *estr)
 int print_d(int input, int fd)
 {
 	int (*__putchar)(char) = _putchar;
-	int i = 1000000000, count = 0;
+	int i, count = 0;
 	unsigned int _abs_, current;
 
 	if (fd == STDERR_FILENO)
-	{
 		__putchar = _eputchar;
-	}
 	if (input < 0)
 	{
 		_abs_ = -input;
@@ -78,11 +68,9 @@ int print_d(int input, int fd)
 		count++;
 	}
 	else
-	{
 		_abs_ = input;
-	}
 	current = _abs_;
-	while (i > 1)
+	for (i = 1000000000; i > 1; i /= 10)
 	{
 		if (_abs_ / i)
 		{
@@ -90,7 +78,6 @@ int print_d(int input, int fd)
 			count++;
 		}
 		current %= i;
-		i /= 10;
 	}
 	__putchar('0' + current);
 	count++;
@@ -130,9 +117,7 @@ char *convert_number(long int num, int base, int flags)
 	} while (n != 0);
 
 	if (sign)
-	{
 		*--ptr = sign;
-	}
 	return (ptr);
 }
 
@@ -152,4 +137,78 @@ void remove_comments(char *buf)
 			buf[i] = '\0';
 			break;
 		}
+}
+#include "shell.h"
+
+/**
+ **_strncpy - copies a string
+ *@dest: the destination string to be copied to
+ *@src: the source string
+ *@n: the amount of characters to be copied
+ *Return: the concatenated string
+ */
+char *_strncpy(char *dest, char *src, int n)
+{
+	int i, j;
+	char *s = dest;
+
+	i = 0;
+	while (src[i] != '\0' && i < n - 1)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	if (i < n)
+	{
+		j = i;
+		while (j < n)
+		{
+			dest[j] = '\0';
+			j++;
+		}
+	}
+	return (s);
+}
+
+/**
+ **_strncat - concatenates two strings
+ *@dest: the first string
+ *@src: the second string
+ *@n: the amount of bytes to be maximally used
+ *Return: the concatenated string
+ */
+char *_strncat(char *dest, char *src, int n)
+{
+	int i, j;
+	char *s = dest;
+
+	i = 0;
+	j = 0;
+	while (dest[i] != '\0')
+		i++;
+	while (src[j] != '\0' && j < n)
+	{
+		dest[i] = src[j];
+		i++;
+		j++;
+	}
+	if (j < n)
+		dest[i] = '\0';
+	return (s);
+}
+
+/**
+ **_strchr - locates a character in a string
+ *@s: the string to be parsed
+ *@c: the character to look for
+ *Return: (s) a pointer to the memory area s
+ */
+char *_strchr(char *s, char c)
+{
+	do {
+		if (*s == c)
+			return (s);
+	} while (*s++ != '\0');
+
+	return (NULL);
 }

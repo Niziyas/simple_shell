@@ -1,23 +1,21 @@
-#include <stdio.h>
 #include "shell.h"
 
 /**
- * _eputs - prints an input string
+ *_eputs - prints an input string
  * @str: the string to be printed
  *
  * Return: Nothing
  */
 void _eputs(char *str)
 {
-	int i;
+	int i = 0;
 
 	if (!str)
-	{
 		return;
-	}
-	for (i = 0; str[i] != '\0'; i++)
+	while (str[i] != '\0')
 	{
 		_eputchar(str[i]);
+		i++;
 	}
 }
 
@@ -39,9 +37,7 @@ int _eputchar(char c)
 		i = 0;
 	}
 	if (c != BUF_FLUSH)
-	{
 		buf[i++] = c;
-	}
 	return (1);
 }
 
@@ -64,14 +60,12 @@ int _putfd(char c, int fd)
 		i = 0;
 	}
 	if (c != BUF_FLUSH)
-	{
 		buf[i++] = c;
-	}
 	return (1);
 }
 
 /**
- * _putsfd - prints an input string
+ *_putsfd - prints an input string
  * @str: the string to be printed
  * @fd: the filedescriptor to write to
  *
@@ -82,9 +76,7 @@ int _putsfd(char *str, int fd)
 	int i = 0;
 
 	if (!str)
-	{
 		return (0);
-	}
 	while (*str)
 	{
 		i += _putfd(*str++, fd);
