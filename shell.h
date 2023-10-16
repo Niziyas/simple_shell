@@ -126,10 +126,10 @@ char *find_path(info_t *, char *, char *);
 int loophsh(char **);
 
 /* toem_errors.c */
-void _eputs(char *);
-int _eputchar(char);
-int _putfd(char c, int fd);
-int _putsfd(char *str, int fd);
+void printString(char *);
+int printCharToStderr(char);
+int writeCharToFD(char c, int fd);
+int writeStringToFD(char *str, int fd);
 
 /* toem_string.c */
 int _strlen(char *);
@@ -193,11 +193,11 @@ void set_info(info_t *, char **);
 void free_info(info_t *, int);
 
 /* toem_environ.c */
-char *_getenv(info_t *, const char *);
-int _myenv(info_t *);
-int _mysetenv(info_t *);
-int _myunsetenv(info_t *);
-int populate_env_list(info_t *);
+int printEnvironment(info_t *);
+char *getEnvValue(info_t *, const char *);
+int setEnvironmentVariable(info_t *);
+int unsetEnvironmentVariable(info_t *);
+int populateEnvironmentList(info_t *);
 
 /* toem_getenv.c */
 char **get_environ(info_t *);
@@ -214,7 +214,7 @@ int renumber_history(info_t *info);
 /* toem_lists.c */
 list_t *add_node(list_t **, const char *, int);
 list_t *add_node_end(list_t **, const char *, int);
-size_t print_list_str(const list_t *);
+size_t print_environment(const list_t *);
 int delete_node_at_index(list_t **, unsigned int);
 void free_list(list_t **);
 

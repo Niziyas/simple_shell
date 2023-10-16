@@ -17,7 +17,7 @@ int hsh(info_t *info, char **av)
 		clear_info(info);
 		if (is_interactive(info))
 			_puts("$ ");
-		_eputchar(BUF_FLUSH);
+		printCharToStderr(BUF_FLUSH);
 		r = get_input(info);
 		if (r != -1)
 		{
@@ -57,11 +57,11 @@ int find_builtin(info_t *info)
 	int i, built_in_ret = -1;
 	builtin_table builtintbl[] = {
 		{"exit", my_exit},
-		{"env", _myenv},
+		{"env", printEnvironment},
 		{"help", my_help},
 		{"history", my_history},
-		{"setenv", _mysetenv},
-		{"unsetenv", _myunsetenv},
+		{"setenv", setEnvironmentVariable},
+		{"unsetenv", unsetEnvironmentVariable},
 		{"cd", my_cd},
 		{"alias", my_alias},
 		{NULL, NULL}
@@ -100,7 +100,7 @@ void find_cmd(info_t *info)
 	if (!k)
 		return;
 
-	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
+	path = find_path(info, getEnvValue(info, "PATH="), info->argv[0]);
 	if (path)
 	{
 		info->path = path;
@@ -108,7 +108,7 @@ void find_cmd(info_t *info)
 	}
 	else
 	{
-		if ((is_interactive(info) || _getenv(info, "PATH=")
+		if ((is_interactive(info) || getEnvValue(info, "PATH=")
 					|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
 			fork_cmd(info);
 		else if (*(info->arg) != '\n')

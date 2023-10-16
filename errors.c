@@ -1,12 +1,10 @@
 #include "shell.h"
 
 /**
- * _eputs - prints an input string
- * @str: the string to be printed
- *
- * Return: Nothing
+ * printString - Prints a string to the standard output.
+ * @str: The string to be printed.
  */
-void _eputs(char *str)
+void printString(char *str)
 {
 	int i = 0;
 
@@ -14,19 +12,20 @@ void _eputs(char *str)
 		return;
 	while (str[i] != '\0')
 	{
-		_eputchar(str[i]);
+		printCharToStderr(str[i]);
 		i++;
 	}
 }
 
+
 /**
- * _eputchar - writes the character c to stderr
+ * printCharToStderr - writes the character c to stderr
  * @c: The character to print
  *
  * Return: On success 1.
  * On error, -1 is returned, and errno is set appropriately.
  */
-int _eputchar(char c)
+int printCharToStderr(char c)
 {
 	static int i;
 	static char buf[WRITE_BUF_SIZE];
@@ -42,14 +41,14 @@ int _eputchar(char c)
 }
 
 /**
- * _putfd - writes the character c to given fd
- * @c: The character to print
- * @fd: The filedescriptor to write to
+ * writeCharToFD - Writes a character to the specified file descriptor.
+ * @c: The character to print.
+ * @fd: The file descriptor to write to.
  *
- * Return: On success 1.
+ * Return: On success, 1.
  * On error, -1 is returned, and errno is set appropriately.
  */
-int _putfd(char c, int fd)
+int writeCharToFD(char c, int fd)
 {
 	static int i;
 	static char buf[WRITE_BUF_SIZE];
@@ -65,21 +64,27 @@ int _putfd(char c, int fd)
 }
 
 /**
- * _putsfd - prints an input string
- * @str: the string to be printed
- * @fd: the filedescriptor to write to
+ * writeStringToFD - Writes a string to the specified file descriptor.
+ * @str: The string to be printed.
+ * @fd: The file descriptor to write to.
  *
- * Return: the number of chars put
+ * Return: The number of characters written.
  */
-int _putsfd(char *str, int fd)
+int writeStringToFD(char *str, int fd)
 {
-	int i = 0;
+	int chars_written = 0;
 
 	if (!str)
-		return (0);
+		return (chars_written);
+
 	while (*str)
 	{
-		i += _putfd(*str++, fd);
+		if (writeCharToFD(*str, fd) == -1)
+			return (-1);
+		chars_written++;
+		str++;
 	}
-	return (i);
+
+	return (chars_written);
 }
+

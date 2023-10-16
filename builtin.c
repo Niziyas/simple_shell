@@ -18,8 +18,8 @@ int my_exit(info_t *info)
 		{
 			info->status = 2;
 			print_error(info, "Illegal number: ");
-			_eputs(info->argv[1]);
-			_eputchar('\n');
+			printString(info->argv[1]);
+			printCharToStderr('\n');
 		}
 	}
 	else
@@ -40,19 +40,19 @@ int my_cd(info_t *info)
 	char *current_dir = getcwd(NULL, 0);
 
 	if (!new_dir || _strcmp(new_dir, "~") == 0)
-		new_dir = _getenv(info, "HOME=");
+		new_dir = getEnvValue(info, "HOME=");
 
 	if (!new_dir)
 		new_dir = "/";
 
 	if (_strcmp(new_dir, "-") == 0)
-		new_dir = _getenv(info, "OLDPWD=");
+		new_dir = getEnvValue(info, "OLDPWD=");
 
 	if (chdir(new_dir) == -1)
 	{
 		print_error(info, "can't cd to ");
-		_eputs(new_dir);
-		_eputchar('\n');
+		printString(new_dir);
+		printCharToStderr('\n');
 		free(current_dir);
 		return (-1);
 	}
