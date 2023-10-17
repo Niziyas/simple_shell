@@ -23,7 +23,7 @@
 #define CMD_AND		2
 #define CMD_CHAIN	3
 
-/* for convert_number() */
+/* for int_to_base() */
 #define CONVERT_LOWERCASE	1
 #define CONVERT_UNSIGNED	2
 
@@ -144,9 +144,9 @@ void _puts(char *);
 int _putchar(char);
 
 /* toem_exits.c */
-char *_strncpy(char *, char *, int);
-char *_strncat(char *, char *, int);
-char *_strchr(char *, char);
+char *copy_n_characters(char *, char *, int);
+char *concatenate_n_characters(char *, char *, int);
+char *find_character(char *, char);
 
 /* toem_tokenizer.c */
 char **strtow(char *, char *);
@@ -167,11 +167,11 @@ int is_alpha(int);
 int string_to_int(char *);
 
 /* toem_errors1.c */
-int _erratoi(char *);
-void print_error(info_t *, char *);
-int print_d(int, int);
-char *convert_number(long int, int, int);
-void remove_comments(char *);
+int str_to_int(char *);
+void print_error_message(info_t *, char *);
+int print_decimalecimal(int, int);
+char *int_to_base(long int, int, int);
+void remove_first_comment(char *);
 
 /* toem_builtin.c */
 int my_exit(info_t *);

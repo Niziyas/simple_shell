@@ -17,7 +17,7 @@ int my_exit(info_t *info)
 		else
 		{
 			info->status = 2;
-			print_error(info, "Illegal number: ");
+			print_error_message(info, "Illegal number: ");
 			printString(info->argv[1]);
 			printCharToStderr('\n');
 		}
@@ -50,7 +50,7 @@ int my_cd(info_t *info)
 
 	if (chdir(new_dir) == -1)
 	{
-		print_error(info, "can't cd to ");
+		print_error_message(info, "can't cd to ");
 		printString(new_dir);
 		printCharToStderr('\n');
 		free(current_dir);
