@@ -8,24 +8,24 @@
  */
 int my_exit(info_t *info)
 {
-	if (info->argv[1])
-	{
-		int exit_status = string_to_int(info->argv[1]);
+	int exitcheck;
 
-		if (exit_status >= 0)
-			exit(exit_status);
-		else
+	if (info->argv[1])  /* If there is an exit arguement */
+	{
+		exitcheck = string_to_int(info->argv[1]);
+		if (exitcheck == -1)
 		{
 			info->status = 2;
 			print_error_message(info, "Illegal number: ");
 			printString(info->argv[1]);
 			printCharToStderr('\n');
+			return (1);
 		}
+		info->err_num = str_to_int(info->argv[1]);
+		return (-2);
 	}
-	else
-		exit(0);
-
-	return (0);
+	info->err_num = -1;
+	return (-2);
 }
 
 /**
@@ -36,31 +36,45 @@ int my_exit(info_t *info)
  */
 int my_cd(info_t *info)
 {
-	char *new_dir = info->argv[1];
-	char *current_dir = getcwd(NULL, 0);
+	char *s, *dir, buffer[1024];
+	int chdir_ret;
 
-	if (!new_dir || string_compare(new_dir, "~") == 0)
-		new_dir = getEnvValue(info, "HOME=");
-
-	if (!new_dir)
-		new_dir = "/";
-
-	if (string_compare(new_dir, "-") == 0)
-		new_dir = getEnvValue(info, "OLDPWD=");
-
-	if (chdir(new_dir) == -1)
+	s = getcwd(buffer, 1024);
+	if (!s)
+		printString("TODO: >>getcwd failure emsg here<<\n");
+	if (!info->argv[1])
+	{
+		dir = getEnvValue(info, "HOME=");
+		if (!dir)
+			chdir_ret = /* TODO: what should this be? */
+				chdir((dir = getEnvValue(info, "PWD=")) ? dir : "/");
+		else
+			chdir_ret = chdir(dir);
+	}
+	else if (string_compare(info->argv[1], "-") == 0)
+	{
+		if (!getEnvValue(info, "OLDPWD="))
+		{
+			printString(s);
+			printCharToStderr('\n');
+			return (1);
+		}
+		printString(getEnvValue(info, "OLDPWD=")), printCharToStderr('\n');
+		chdir_ret = /* TODO: what should this be? */
+			chdir((dir = getEnvValue(info, "OLDPWD=")) ? dir : "/");
+	}
+	else
+		chdir_ret = chdir(info->argv[1]);
+	if (chdir_ret == -1)
 	{
 		print_error_message(info, "can't cd to ");
-		printString(new_dir);
-		printCharToStderr('\n');
-		free(current_dir);
-		return (-1);
+		printString(info->argv[1]), printCharToStderr('\n');
 	}
-
-	initialize_or_modify_environment(info, "OLDPWD", current_dir);
-	initialize_or_modify_environment(info, "PWD", getcwd(NULL, 0));
-	free(current_dir);
-
+	else
+	{
+		initialize_or_modify_environment(info, "OLDPWD", getEnvValue(info, "PWD="));
+		initialize_or_modify_environment(info, "PWD", getcwd(buffer, 1024));
+	}
 	return (0);
 }
 
