@@ -53,9 +53,6 @@ void print_error_message(info_t *info, char *estr)
  *
  * Return: number of characters printed
  */
-
-
-
 int print_decimalecimal(int input, int fd)
 {
 	int (*__write_char_to_stdout)(char) = write_char_to_stdout;

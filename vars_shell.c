@@ -121,20 +121,20 @@ int replace_vars(info_t *info)
 		if (!string_compare(info->argv[i], "$?"))
 		{
 			replace_string(&(info->argv[i]),
-					string_duplicate(int_to_base(info->status, 10, 0)));
+				string_duplicate(int_to_base(info->status, 10, 0)));
 			continue;
 		}
 		if (!string_compare(info->argv[i], "$$"))
 		{
 			replace_string(&(info->argv[i]),
-					string_duplicate(int_to_base(getpid(), 10, 0)));
+				string_duplicate(int_to_base(getpid(), 10, 0)));
 			continue;
 		}
 		node = find_node_with_prefix(info->env, &info->argv[i][1], '=');
 		if (node)
 		{
 			replace_string(&(info->argv[i]),
-					string_duplicate(find_character(node->str, '=') + 1));
+				string_duplicate(find_character(node->str, '=') + 1));
 			continue;
 		}
 		replace_string(&info->argv[i], string_duplicate(""));
