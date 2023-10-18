@@ -33,16 +33,12 @@ int isExecutableCommand(info_t *info, char *path)
 char *duplicateChars(char *pathstr, int start, int stop)
 {
 	static char buf[1024];
-	int i = start, k = 0;
+	int i = 0, k = 0;
 
-	while (k < 1024 && i < stop)
-	{
+	for (k = 0, i = start; i < stop; i++)
 		if (pathstr[i] != ':')
 			buf[k++] = pathstr[i];
-		i++;
-	}
-
-	buf[k] = '\0';
+	buf[k] = 0;
 	return (buf);
 }
 
@@ -66,9 +62,9 @@ char *findPath(info_t *info, char *pathstr, char *cmd)
 		if (isExecutableCommand(info, cmd))
 			return (cmd);
 	}
-	for (i = 0; pathstr[i]; i++)
+	while (1)
 	{
-		if (pathstr[i] == ':')
+		if (!pathstr[i] || pathstr[i] == ':')
 		{
 			path = duplicateChars(pathstr, curr_pos, i);
 			if (!*path)
@@ -80,18 +76,11 @@ char *findPath(info_t *info, char *pathstr, char *cmd)
 			}
 			if (isExecutableCommand(info, path))
 				return (path);
-			curr_pos = i + 1;
+			if (!pathstr[i])
+				break;
+			curr_pos = i;
 		}
+		i++;
 	}
-	path = duplicateChars(pathstr, curr_pos, i);
-	if (!*path)
-		string_concat(path, cmd);
-	else
-	{
-		string_concat(path, "/");
-		string_concat(path, cmd);
-	}
-	if (isExecutableCommand(info, path))
-		return (path);
 	return (NULL);
 }
