@@ -1,6 +1,7 @@
 #ifndef _SHELL_H_
 #define _SHELL_H_
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -22,7 +23,7 @@
 #define CMD_AND		2
 #define CMD_CHAIN	3
 
-/* for convert_number() */
+/* for int_to_base() */
 #define CONVERT_LOWERCASE	1
 #define CONVERT_UNSIGNED	2
 
@@ -125,10 +126,10 @@ char *find_path(info_t *, char *, char *);
 int loophsh(char **);
 
 /* toem_errors.c */
-void _eputs(char *);
-int _eputchar(char);
-int _putfd(char c, int fd);
-int _putsfd(char *str, int fd);
+void printString(char *);
+int printCharToStderr(char);
+int writeCharToFD(char c, int fd);
+int writeStringToFD(char *str, int fd);
 
 /* toem_string.c */
 int _strlen(char *);
@@ -143,9 +144,9 @@ void _puts(char *);
 int _putchar(char);
 
 /* toem_exits.c */
-char *_strncpy(char *, char *, int);
-char *_strncat(char *, char *, int);
-char *_strchr(char *, char);
+char *copy_n_characters(char *, char *, int);
+char *concatenate_n_characters(char *, char *, int);
+char *find_character(char *, char);
 
 /* toem_tokenizer.c */
 char **strtow(char *, char *);
@@ -160,26 +161,26 @@ void *_realloc(void *, unsigned int, unsigned int);
 int bfree(void **);
 
 /* toem_atoi.c */
-int interactive(info_t *);
-int is_delim(char, char *);
-int _isalpha(int);
-int _atoi(char *);
+int is_interactive(info_t *);
+int is_delimiter(char, char *);
+int is_alpha(int);
+int string_to_int(char *);
 
 /* toem_errors1.c */
-int _erratoi(char *);
-void print_error(info_t *, char *);
-int print_d(int, int);
-char *convert_number(long int, int, int);
-void remove_comments(char *);
+int str_to_int(char *);
+void print_error_message(info_t *, char *);
+int print_decimalecimal(int, int);
+char *int_to_base(long int, int, int);
+void remove_first_comment(char *);
 
 /* toem_builtin.c */
-int _myexit(info_t *);
-int _mycd(info_t *);
-int _myhelp(info_t *);
+int my_exit(info_t *);
+int my_cd(info_t *);
+int my_help(info_t *);
 
 /* toem_builtin1.c */
-int _myhistory(info_t *);
-int _myalias(info_t *);
+int my_history(info_t *);
+int my_alias(info_t *);
 
 /*toem_getline.c */
 ssize_t get_input(info_t *);
@@ -192,11 +193,11 @@ void set_info(info_t *, char **);
 void free_info(info_t *, int);
 
 /* toem_environ.c */
-char *_getenv(info_t *, const char *);
-int _myenv(info_t *);
-int _mysetenv(info_t *);
-int _myunsetenv(info_t *);
-int populate_env_list(info_t *);
+int printEnvironment(info_t *);
+char *getEnvValue(info_t *, const char *);
+int setEnvironmentVariable(info_t *);
+int unsetEnvironmentVariable(info_t *);
+int populateEnvironmentList(info_t *);
 
 /* toem_getenv.c */
 char **get_environ(info_t *);
@@ -213,14 +214,14 @@ int renumber_history(info_t *info);
 /* toem_lists.c */
 list_t *add_node(list_t **, const char *, int);
 list_t *add_node_end(list_t **, const char *, int);
-size_t print_list_str(const list_t *);
+size_t print_environment(const list_t *);
 int delete_node_at_index(list_t **, unsigned int);
 void free_list(list_t **);
 
 /* toem_lists1.c */
 size_t list_len(const list_t *);
 char **list_to_strings(list_t *);
-size_t print_list(const list_t *);
+size_t print_history(const list_t *);
 list_t *node_starts_with(list_t *, char *, char);
 ssize_t get_node_index(list_t *, list_t *);
 

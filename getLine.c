@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "shell.h"
 
 /**
@@ -33,9 +32,9 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 				r--;
 			}
 			info->linecount_flag = 1;
-			remove_comments(*buf);
+			remove_first_comment(*buf);
 			build_history_list(info, *buf, info->histcount++);
-			/* if (_strchr(*buf, ';')) is this a command chain? */
+			/* if (find_character(*buf, ';')) is this a command chain? */
 			{
 				*len = r;
 				info->cmd_buf = buf;
@@ -61,21 +60,18 @@ ssize_t get_input(info_t *info)
 	_putchar(BUF_FLUSH);
 	r = input_buf(info, &buf, &len);
 	if (r == -1) /* EOF */
-	{
 		return (-1);
-	}
 	if (len) /* we have commands left in the chain buffer */
 	{
 		j = i; /* init new iterator to current buf position */
 		p = buf + i; /* get pointer for return */
 
 		check_chain(info, buf, &j, i, len);
-		for (j ; j < len; j++) /* iterate to semicolon or end */
+		while (j < len) /* iterate to semicolon or end */
 		{
 			if (is_chain(info, buf, &j))
-			{
 				break;
-			}
+			j++;
 		}
 
 		i = j + 1; /* increment past nulled ';'' */
@@ -106,14 +102,10 @@ ssize_t read_buf(info_t *info, char *buf, size_t *i)
 	ssize_t r = 0;
 
 	if (*i)
-	{
 		return (0);
-	}
 	r = read(info->readfd, buf, READ_BUF_SIZE);
 	if (r >= 0)
-	{
 		*i = r;
-	}
 	return (r);
 }
 
@@ -143,16 +135,16 @@ int _getline(info_t *info, char **ptr, size_t *length)
 	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
 
-	c = _strchr(buf + i, '\n');
+	c = find_character(buf + i, '\n');
 	k = c ? 1 + (unsigned int)(c - buf) : len;
 	new_p = _realloc(p, s, s ? s + k : k + 1);
 	if (!new_p) /* MALLOC FAILURE! */
 		return (p ? free(p), -1 : -1);
 
 	if (s)
-		_strncat(new_p, buf + i, k - i);
+		concatenate_n_characters(new_p, buf + i, k - i);
 	else
-		_strncpy(new_p, buf + i, k - i + 1);
+		copy_n_characters(new_p, buf + i, k - i + 1);
 
 	s += k - i;
 	i = k;
