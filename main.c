@@ -23,7 +23,7 @@ int main(int ac, char **av)
 			if (errno == ENOENT)
 			{
 				printString(av[0]);
-				printString( "0 : Can't open");
+				printString("0 : Can't open");
 				printString(av[1]);
 				printString("\n");
 				return (127);
