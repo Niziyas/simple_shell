@@ -59,16 +59,16 @@ void print_error_message(info_t *info, char *estr)
  */
 int print_decimalecimal(int input, int fd)
 {
-	int (*__putchar)(char) = _putchar;
+	int (*_write_char_to_stdout)(char) = write_char_to_stdout;
 	int i, count = 0;
 	unsigned int _abs_, current;
 
 	if (fd == STDERR_FILENO)
-		__putchar = printCharToStderr;
+		_write_char_to_stdout = printCharToStderr;
 	if (input < 0)
 	{
 		_abs_ = -input;
-		__putchar('-');
+		_write_char_to_stdout('-');
 		count++;
 	}
 	else
@@ -79,13 +79,13 @@ int print_decimalecimal(int input, int fd)
 	{
 		if (_abs_ / i)
 		{
-			__putchar('0' + current / i);
+			_write_char_to_stdout('0' + current / i);
 			count++;
 		}
 		current %= i;
 		i /= 10;
 	}
-	__putchar('0' + current);
+	_write_char_to_stdout('0' + current);
 	count++;
 
 	return (count);

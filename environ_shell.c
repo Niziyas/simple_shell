@@ -7,7 +7,7 @@
  */
 int printEnvironment(info_t *info)
 {
-	print_environment(info->env);
+	print_environment_list(info->env);
 	return (0);
 }
 
@@ -24,7 +24,7 @@ char *getEnvValue(info_t *info, const char *name)
 
 	while (node)
 	{
-		if (starts_with(node->str, name))
+		if (find_start(node->str, name))
 		{
 			value = strchr(node->str, '=') + 1;
 			break;
@@ -49,7 +49,7 @@ int setEnvironmentVariable(info_t *info)
 		return (1);
 	}
 
-	if (_setenv(info, info->argv[1], info->argv[2]))
+	if (initialize_or_modify_environment(info, info->argv[1], info->argv[2]))
 		return (0);
 
 	return (1);
@@ -72,7 +72,7 @@ int unsetEnvironmentVariable(info_t *info)
 
 	while (i < info->argc)
 	{
-		_unsetenv(info, info->argv[i]);
+		remove_environment_variable(info, info->argv[i]);
 		i++;
 	}
 
@@ -91,7 +91,7 @@ int populateEnvironmentList(info_t *info)
 
 	while (environ[i])
 	{
-		add_node_end(&node, environ[i], 0);
+		prepend_node_end(&node, environ[i], 0);
 		i++;
 	}
 

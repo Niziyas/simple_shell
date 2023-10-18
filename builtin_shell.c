@@ -39,13 +39,13 @@ int my_cd(info_t *info)
 	char *new_dir = info->argv[1];
 	char *current_dir = getcwd(NULL, 0);
 
-	if (!new_dir || _strcmp(new_dir, "~") == 0)
+	if (!new_dir || string_compare(new_dir, "~") == 0)
 		new_dir = getEnvValue(info, "HOME=");
 
 	if (!new_dir)
 		new_dir = "/";
 
-	if (_strcmp(new_dir, "-") == 0)
+	if (string_compare(new_dir, "-") == 0)
 		new_dir = getEnvValue(info, "OLDPWD=");
 
 	if (chdir(new_dir) == -1)
@@ -57,8 +57,8 @@ int my_cd(info_t *info)
 		return (-1);
 	}
 
-	_setenv(info, "OLDPWD", current_dir);
-	_setenv(info, "PWD", getcwd(NULL, 0));
+	initialize_or_modify_environment(info, "OLDPWD", current_dir);
+	initialize_or_modify_environment(info, "PWD", getcwd(NULL, 0));
 	free(current_dir);
 
 	return (0);
@@ -75,8 +75,8 @@ int my_help(info_t *info)
 	char **arg_array;
 
 	arg_array = info->argv;
-	_puts("help call works. Function not yet implemented \n");
+	print_string("help call works. Function not yet implemented \n");
 	if (0)
-		_puts(*arg_array); /* temp att_unused workaround */
+		print_string(*arg_array); /* temp att_unused workaround */
 	return (0);
 }
