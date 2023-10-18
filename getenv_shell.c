@@ -35,7 +35,7 @@ int remove_environment_variable(info_t *info, char *var)
 	if (!node || !var)
 		return (0);
 
-	for (i = 0; node; i++)
+	while (node)
 	{
 		p = find_start(node->str, var);
 		if (p && *p == '=')
@@ -43,13 +43,11 @@ int remove_environment_variable(info_t *info, char *var)
 			info->env_changed = remove_node_at_index(&(info->env), i);
 			i = 0;
 			node = info->env;
+			continue;
 		}
-		else
-		{
-			node = node->next;
-		}
+		node = node->next;
+		i++;
 	}
-
 	return (info->env_changed);
 }
 
@@ -76,12 +74,11 @@ int initialize_or_modify_environment(info_t *info, char *var, char *value)
 	buf = malloc(string_length(var) + string_length(value) + 2);
 	if (!buf)
 		return (1);
-
 	string_copy(buf, var);
 	string_concat(buf, "=");
 	string_concat(buf, value);
-
-	for (node = info->env; node; node = node->next)
+	node = info->env;
+	while (node)
 	{
 		p = find_start(node->str, var);
 		if (p && *p == '=')
@@ -89,11 +86,10 @@ int initialize_or_modify_environment(info_t *info, char *var, char *value)
 			free(node->str);
 			node->str = buf;
 			info->env_changed = 1;
-			free(buf);
 			return (0);
 		}
+		node = node->next;
 	}
-
 	prepend_node_end(&(info->env), buf, 0);
 	free(buf);
 	info->env_changed = 1;
