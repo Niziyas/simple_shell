@@ -72,19 +72,14 @@ int writeCharToFD(char c, int fd)
  */
 int writeStringToFD(char *str, int fd)
 {
-	int chars_written = 0;
+	int i = 0;
 
 	if (!str)
-		return (chars_written);
-
+		return (0);
 	while (*str)
 	{
-		if (writeCharToFD(*str, fd) == -1)
-			return (-1);
-		chars_written++;
-		str++;
+		i += writeCharToFD(*str++, fd);
 	}
-
-	return (chars_written);
+	return (i);
 }
 

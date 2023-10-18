@@ -12,9 +12,8 @@ int str_to_int(char *s)
 	unsigned long int result = 0;
 
 	if (*s == '+')
-		s++;
-
-	while (s[i] != '\0')
+		s++;  /* TODO: why does this make main return 255? */
+	for (i = 0;  s[i] != '\0'; i++)
 	{
 		if (s[i] >= '0' && s[i] <= '9')
 		{
@@ -25,10 +24,7 @@ int str_to_int(char *s)
 		}
 		else
 			return (-1);
-
-		i++;
 	}
-
 	return (result);
 }
 
@@ -59,33 +55,31 @@ void print_error_message(info_t *info, char *estr)
  */
 int print_decimalecimal(int input, int fd)
 {
-	int (*__putchar)(char) = _putchar;
+	int (*__write_char_to_stdout)(char) = write_char_to_stdout;
 	int i, count = 0;
 	unsigned int _abs_, current;
 
 	if (fd == STDERR_FILENO)
-		__putchar = printCharToStderr;
+		__write_char_to_stdout = printCharToStderr;
 	if (input < 0)
 	{
 		_abs_ = -input;
-		__putchar('-');
+		__write_char_to_stdout('-');
 		count++;
 	}
 	else
 		_abs_ = input;
 	current = _abs_;
-	i = 1000000000;
-	while (i > 1)
+	for (i = 1000000000; i > 1; i /= 10)
 	{
 		if (_abs_ / i)
 		{
-			__putchar('0' + current / i);
+			__write_char_to_stdout('0' + current / i);
 			count++;
 		}
 		current %= i;
-		i /= 10;
 	}
-	__putchar('0' + current);
+	__write_char_to_stdout('0' + current);
 	count++;
 
 	return (count);
@@ -103,26 +97,29 @@ int print_decimalecimal(int input, int fd)
  */
 char *int_to_base(long int num, int base, int flags)
 {
+	static char *array;
 	static char buffer[50];
-	char *ptr = &buffer[49];
-	char *array = (flags & CONVERT_LOWERCASE) ? "0123456789abcdef" :
-	 "0123456789ABCDEF";
 	char sign = 0;
-	unsigned long n = (num < 0 && !(flags & CONVERT_UNSIGNED)) ? -num : num;
+	char *ptr;
+	unsigned long n = num;
 
-	*ptr = '\0';
-
-	if (num < 0 && !(flags & CONVERT_UNSIGNED))
+	if (!(flags & CONVERT_UNSIGNED) && num < 0)
+	{
+		n = -num;
 		sign = '-';
 
-	do {
+	}
+	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+	ptr = &buffer[49];
+	*ptr = '\0';
+
+	do	{
 		*--ptr = array[n % base];
 		n /= base;
 	} while (n != 0);
 
 	if (sign)
 		*--ptr = sign;
-
 	return (ptr);
 }
 

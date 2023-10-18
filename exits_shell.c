@@ -9,7 +9,7 @@
  */
 char *copy_n_characters(char *dest, char *src, int n)
 {
-	int i;
+	int i, j;
 	char *s = dest;
 
 	for (i = 0; src[i] != '\0' && i < n - 1; i++)
@@ -17,7 +17,7 @@ char *copy_n_characters(char *dest, char *src, int n)
 		dest[i] = src[i];
 	}
 
-	for (int j = i; j < n; j++)
+	for (j = i; j < n; j++)
 	{
 		dest[j] = '\0';
 	}
