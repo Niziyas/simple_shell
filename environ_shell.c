@@ -20,19 +20,16 @@ int printEnvironment(info_t *info)
 char *getEnvValue(info_t *info, const char *name)
 {
 	list_t *node = info->env;
-	char *value = NULL;
+	char *p;
 
 	while (node)
 	{
-		if (find_start(node->str, name))
-		{
-			value = strchr(node->str, '=') + 1;
-			break;
-		}
+		p = find_start(node->str, name);
+		if (p && *p)
+			return (p);
 		node = node->next;
 	}
-
-	return (value);
+	return (NULL);
 }
 
 /**
@@ -45,13 +42,11 @@ int setEnvironmentVariable(info_t *info)
 {
 	if (info->argc != 3)
 	{
-		printString("Usage: setEnvironmentVariable VARIABLE VALUE\n");
+		printString("Incorrect number of arguements\n");
 		return (1);
 	}
-
 	if (initialize_or_modify_environment(info, info->argv[1], info->argv[2]))
 		return (0);
-
 	return (1);
 }
 
@@ -62,22 +57,19 @@ int setEnvironmentVariable(info_t *info)
  */
 int unsetEnvironmentVariable(info_t *info)
 {
-	int i = 1;
+	int i;
 
-	if (info->argc < 2)
+	if (info->argc == 1)
 	{
-		printString("Usage: unsetEnvironmentVariable VARIABLE1 [VARIABLE2 ...]\n");
+		printString("Too few arguements.\n");
 		return (1);
 	}
-
-	while (i < info->argc)
-	{
+	for (i = 1; i <= info->argc; i++)
 		remove_environment_variable(info, info->argv[i]);
-		i++;
-	}
 
 	return (0);
 }
+
 
 /**
  * populateEnvironmentList - Populate the environment linked list.
@@ -87,14 +79,10 @@ int unsetEnvironmentVariable(info_t *info)
 int populateEnvironmentList(info_t *info)
 {
 	list_t *node = NULL;
-	size_t i = 0;
+	size_t i;
 
-	while (environ[i])
-	{
+	for (i = 0; environ[i]; i++)
 		prepend_node_end(&node, environ[i], 0);
-		i++;
-	}
-
 	info->env = node;
 	return (0);
 }
